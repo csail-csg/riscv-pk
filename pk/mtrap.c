@@ -183,7 +183,9 @@ static uintptr_t mcall_send_ipi(uintptr_t recipient)
 
   if (atomic_swap(&OTHER_HLS(recipient)->ipi_pending, 1) == 0) {
     mb();
-    write_csr(send_ipi, recipient);
+    // [sizhuo] new versions of gcc drops send_ipi csr, manually add it here
+    //write_csr(send_ipi, recipient);
+    asm volatile ("csrw 0x783, %0" :: "r"(recipient));
   }
 
   return 0;

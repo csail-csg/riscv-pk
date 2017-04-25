@@ -182,7 +182,7 @@ mentry:
 .LmultiHart:
   # mhartid may not be contiguous, so generate a hart id using AMOs
   la a0, num_harts_booted
-  la a1, 1
+  li a1, 1 # [sizhuo] originally use la a1,1; doesn't compile with new gcc
   amoadd.w a0, a1, (a0)
 
   # allocate stack
